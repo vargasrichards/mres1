@@ -1,0 +1,59 @@
+        - 
+        - 
+        - """
+        -     make_initial_state(class_sizes::Vector{Int}, p_inf::Float64; init_mode::Symbol = :uniform,
+        -     init_class::Int = 1)
+        - 
+        - Make the initial state of population to be simulated.
+        - 
+        - # Examples
+        - ```{jldoctest}
+        - julia> using MixSwitchStochEpi
+        - ```
+        - 
+        - """
+      336 function make_initial_state(
+        -     class_sizes::Vector{Int},
+        -     p_inf::Int;
+        -     init_mode::Symbol = :uniform,
+        -     init_class::Int = 1)
+        - 
+      168     n = length(class_sizes)
+      731     E = zeros(Int, n)
+        - 
+      168     if p_inf < 0
+        0         error("p_inf must be >= 0 (number of initially infected)")
+        -     end
+        - 
+      168     if init_mode == :uniform
+        -         # distribute p_inf as evenly as possible across classes into the I compartment
+       23         if p_inf == 0
+        -             # nothing infected
+        -         else
+       23             base = div(p_inf, n)
+       23             rem = p_inf - base * n
+       23             for i = 1:n
+      106                 E[i] = base
+      189             end
+       23             for i = 1:rem
+       23                 E[i] += 1
+       23             end
+        -         end
+      145     elseif init_mode == :class
+      145         E[init_class] = p_inf
+        -     else
+        0         return error("Unknown init_mode")
+        -     end
+        - 
+      336     S = class_sizes .- E
+      731     I = zeros(Int, n)
+      731     R = zeros(Int, n)
+        - 
+     2924     mat = zeros(Int, 4, n)
+      168     mat[1, :] .= S
+      168     mat[2, :] .= E
+      168     mat[3, :] .= I
+      168     mat[4, :] .= R
+      168     return mat
+        - end
+        - 

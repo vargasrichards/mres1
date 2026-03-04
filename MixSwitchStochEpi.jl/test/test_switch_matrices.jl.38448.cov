@@ -1,0 +1,42 @@
+        - # tests implemented for the switching matrices
+        - using Test
+        - using LinearAlgebra
+        - 
+        1 @testset "Ensure switching matrix generates equal-sized stationary dist " begin
+        1     @testset "stationary dist tests" begin
+       21         for n in 1:20
+       20             W = uniform_switching(0.1, n)
+       20             stat_Wunif = find_steadystate(W)
+       39             @test allequal(isapprox.(stat_Wunif, first(stat_Wunif), atol=1e-8)) == true 
+        - 
+       20             Wadj = constrained_switching(0.1, n)
+        - 
+       20             stat_Wadj = find_steadystate(Wadj)
+       39             @test allequal(isapprox.(stat_Wadj, first(stat_Wadj), atol=1e-8)) == true 
+       39         end
+        -     end
+        - end
+        - 
+        - 
+        - @testset "Ensure switching matrix sums to 0" begin 
+        -     @testset "Adj only switching matrix sums to 0 " begin 
+        -         Wunif = constrained_switching(0.1, 10)
+        -         @test validate_generator(Wunif) == true
+        -         
+        -     end 
+        - 
+        -     @testset "uniformly switching switching matrix sums to 0 " begin
+        -         S = uniform_switching(0.1, 10)
+        -         @test validate_generator(S) == true
+        -     end
+        - end
+        - 
+        - 
+        1 @testset "W transpose = W (switching matrix)" begin # note that this isn't necessarily a rigorous test
+        2     for n in 1:20
+       20         W = uniform_switching(0.1,n)
+       20         @test transpose(W) == W
+       20         Wadj = constrained_switching(0.1, n)
+       20         @test transpose(Wadj) == Wadj
+       39     end
+        - end

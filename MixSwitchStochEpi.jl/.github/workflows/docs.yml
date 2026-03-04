@@ -1,0 +1,30 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.12'
+          arch: x64
+
+      - name: Install docs dependencies
+        run: julia --project=docs -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
+
+      - name: Build docs
+        run: julia --project=docs docs/make.jl
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build

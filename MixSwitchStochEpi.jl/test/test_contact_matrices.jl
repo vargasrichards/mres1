@@ -1,0 +1,137 @@
+# Tests implemented for the contact model
+#
+#
+# A. Vargas Richards Dec. 2025.
+
+# Contact matrix tests
+
+using Test
+
+@testset "Contact Matrix Tests" begin
+
+    @testset "Basic properties" begin
+        # Test with uniform activity and population
+        C = make_garnett_contact(0.5, 3, [1.0, 1.0, 1.0], [100, 100, 100])
+
+        # Matrix should be square
+        @test size(C) == (3, 3)
+
+        # All entries should be non-negative
+        @test all(C .>= 0)
+    end
+
+    @testset "ε = 0: proportionate mixing" begin
+        # With ε=0, all rows should be identical (random mixing)
+        C = make_garnett_contact(0.0, 3, [1.0, 2.0, 3.0], [1000, 1000, 1000])
+
+        # All rows should be the same
+        @test C[1, :] ≈ C[2, :]
+        @test C[2, :] ≈ C[3, :]
+
+        # Check proportions match activity weights
+        # Total activity: 1*1000 + 2*1000 + 3*1000 = 6000
+        @test C[1, 1] ≈ 1000/6000  # C₁N₁/Σ
+        @test C[1, 2] ≈ 2000/6000  # C₂N₂/Σ
+        @test C[1, 3] ≈ 3000/6000  # C₃N₃/Σ
+
+        # Each row should sum to 1
+        @test sum(C[1, :]) ≈ 1.0
+        @test sum(C[2, :]) ≈ 1.0
+        @test sum(C[3, :]) ≈ 1.0
+    end
+
+    @testset "ε = 1 (Purely assortative mixing)" begin
+        C = make_garnett_contact(1.0, 3, [1.0, 2.0, 3.0], [1000, 1000, 1000])
+
+        # Should be identity matrix
+        @test C ≈ [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
+
+        # All off-diagonal elements should be zero
+        @test C[1, 2] ≈ 0.0
+        @test C[1, 3] ≈ 0.0
+        @test C[2, 1] ≈ 0.0
+        @test C[2, 3] ≈ 0.0
+        @test C[3, 1] ≈ 0.0
+        @test C[3, 2] ≈ 0.0
+
+        # Diagonal should all be 1
+        @test C[1, 1] ≈ 1.0
+        @test C[2, 2] ≈ 1.0
+        @test C[3, 3] ≈ 1.0
+    end
+
+    @testset "ε = 0.5 (Mixed)" begin
+        C = make_garnett_contact(0.5, 3, [1.0, 2.0, 3.0], [1000, 1000, 1000])
+
+        # Check formula: ρ[i,j] = δᵢⱼ·ε + (1-ε)·(Cⱼ·Nⱼ)/(Σ Cₛ·Nₛ)
+        # Total: 6000
+        expected_11 = 0.5 * 1 + 0.5 * (1000/6000)  # diagonal
+        expected_12 = 0.5 * 0 + 0.5 * (2000/6000)  # off-diagonal
+        expected_13 = 0.5 * 0 + 0.5 * (3000/6000)  # off-diagonal
+
+        @test C[1, 1] ≈ expected_11
+        @test C[1, 2] ≈ expected_12
+        @test C[1, 3] ≈ expected_13
+
+        # Check that diagonal elements are larger than off-diagonal
+        @test C[1, 1] > C[1, 2]
+        @test C[2, 2] > C[2, 1]
+        @test C[3, 3] > C[3, 2]
+    end
+
+    @testset "Unequal Population Sizes" begin
+        # Different population sizes should affect mixing
+        C = make_garnett_contact(0.0, 3, [1.0, 1.0, 1.0], [100, 200, 300])
+
+        # Total: 100 + 200 + 300 = 600
+        # With uniform activity, should be proportional to population
+        @test C[1, 1] ≈ 100/600
+        @test C[1, 2] ≈ 200/600
+        @test C[1, 3] ≈ 300/600
+    end
+
+    @testset "Row sums" begin
+        # For any ε, rows should have specific sum properties
+        C = make_garnett_contact(0.3, 4, [1.0, 2.0, 3.0, 4.0], [500, 500, 500, 500])
+
+
+        for i = 1:4
+            @test sum(C[i, :]) ≈ 1.0 atol=1e-10 #so that the meaning of rho makes sense as a prob mass function
+        end
+    end
+
+    @testset "Edge cases" begin
+        # Single activity class
+        C = make_garnett_contact(0.5, 1, [1.0], [1000])
+        @test C == [1.0;;]  # Should be 1×1 matrix with value 1
+
+        # Two classes, equal everything
+        C = make_garnett_contact(0.0, 2, [1.0, 1.0], [100, 100])
+        @test C ≈ [0.5 0.5; 0.5 0.5]
+
+        C = make_garnett_contact(1.0, 2, [1.0, 1.0], [100, 100])
+        @test C ≈ [1.0 0.0; 0.0 1.0]
+    end
+
+    @testset "Input validation" begin
+        # ε out of bounds
+        @test_throws AssertionError make_garnett_contact(
+            -0.1, 
+            3,
+            [1.0, 2.0, 3.0],
+            [100, 100, 100],
+        )
+        @test_throws AssertionError make_garnett_contact(
+            1.1, 
+            3,
+            [1.0, 2.0, 3.0],
+            [100, 100, 100],
+        )
+
+        # Mismatched vector lengths
+        @test_throws AssertionError make_garnett_contact(0.5, 3, [1.0, 2.0], [100, 100, 100])
+        @test_throws AssertionError make_garnett_contact(0.5, 3, [1.0, 2.0, 3.0], [100, 100])
+    end
+
+end
+

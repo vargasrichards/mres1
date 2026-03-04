@@ -1,0 +1,77 @@
+
+using LinearAlgebra
+
+""" 
+    make_garnett_contact(ε, n_activity::Int, act_levels::Vector{Float64}, class_sizes::Vector{Int64})
+
+
+Create the matrix of ρ_ij values. Use generative rule from (Garnett et al., 1999) but modified (no sex).
+Returns an n x n contact matrix C where C[i, j] is the contact rate from class i to class j.
+
+# Arguments 
+ε: assortativity parameter (0 ≤ ε ≤ 1)
+n_activity: number of activity classes
+act_levels: activity levels for each class  
+
+
+# Reference 
+R. M. Anderson, Geoff. P. Garnett, Kristen J. Mertz, Lyn Finelli, William C. Levine, Michael E. St Louis; The transmission dynamics of gonorrhoea: modelling the reported behaviour of infected patients from Newark, New Jersey. Philos Trans R Soc Lond B Biol Sci 29 April 1999; 354 (1384): 787–797. https://doi.org/10.1098/rstb.1999.0431
+
+# Examples
+```jldoctest
+julia> using MixSwitchStochEpi
+
+julia> make_garnett_contact(0.2, 10, fill(10., 10), fill(Int(1e5),10))
+10×10 Matrix{Float64}:
+ 0.28  0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.08
+ 0.08  0.28  0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.08
+ 0.08  0.08  0.28  0.08  0.08  0.08  0.08  0.08  0.08  0.08
+ 0.08  0.08  0.08  0.28  0.08  0.08  0.08  0.08  0.08  0.08
+ 0.08  0.08  0.08  0.08  0.28  0.08  0.08  0.08  0.08  0.08
+ 0.08  0.08  0.08  0.08  0.08  0.28  0.08  0.08  0.08  0.08
+ 0.08  0.08  0.08  0.08  0.08  0.08  0.28  0.08  0.08  0.08
+ 0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.28  0.08  0.08
+ 0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.28  0.08
+ 0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.08  0.28
+
+julia> MixSwitchStochEpi.make_garnett_contact(0., 10, fill(10., 10), fill(Int(1e5),10))
+10×10 Matrix{Float64}:
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+ 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
+```
+"""
+function make_garnett_contact(
+    ε::Float64,
+    n_activity::Int,
+    act_levels::Vector{Float64},
+    class_sizes::Vector{Int64},
+)
+    @assert 0 ≤ ε ≤ 1 "Assortativity parameter ε must be in [0,1]"
+    @assert length(act_levels) == n_activity "Length of act_levels must equal n_activity (the number of activity classes)"
+    @assert length(class_sizes) == n_activity "Length of class_sizes must equal n_activity (the number of activity classes)"
+    summed = sum(act_levels .* class_sizes)
+    C = zeros(n_activity, n_activity)
+    for j = 1:n_activity
+        C[:, j] .= (1-ε) * act_levels[j] * class_sizes[j] / summed
+    end
+    for i = 1:n_activity
+        C[i, i] = ε + C[i, i]
+    end
+    return C
+end
+
+"""
+Make the exponential contact model. 
+
+"""
+function exponential_contact()
+
+end

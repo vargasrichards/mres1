@@ -1,0 +1,96 @@
+        - # functions to help in calculating the next-generation matrix
+        - using LinearAlgebra
+        - 
+        - """
+        -     ρMat(parms::SEIRSStochParams)
+        - 
+        - Get the matrix of ρ(i,j) from supplied `parms`
+        - """
+        - function ρMat(parms::SEIRSStochParams)
+        -     return parms.M
+        - end
+        - 
+        - 
+        - """
+        -     Tmat(parms::SEIRSStochParams)
+        - 
+        - Get the transmission matrix from supplied `parms` 
+        - """
+        - function Tmat(parms::SEIRSStochParams)
+      148     n = length(parms.act_levels)
+      148     return [Tmat_entry(parms, i, j) for i = 1:n, j = 1:n]
+        - end
+        - 
+        - 
+        - """"
+        -     Tmat_entry(parms::SEIRSStochParams, i::Int, j::Int)
+        - 
+        - Get entry at position `i`,`j` of transmission matrix for `parms`
+        - """
+        - function Tmat_entry(parms::SEIRSStochParams, i::Int, j::Int)
+     3472     β = parms.β
+     3472     M = parms.M
+     3472     act_levels = parms.act_levels
+     3472     entry = β * act_levels[j] * M[j,i]
+     3472     return entry
+        - end
+        - 
+        - """
+        -     Sigma_mat(parms::SEIRSStochParams)
+        - 
+        - Make the transition matrix from `parms`
+        - 
+        - This is used in the next-generation matrix calculation.
+        - """
+        - function Sigma_mat(parms::SEIRSStochParams)
+      148     n_activity = parms.n_activity
+      708     Σ = parms.W - I(n_activity) * parms.γ
+      148     return Σ
+        - end
+        - 
+        - 
+        - """
+        -     Kmat(parms::SEIRSStochParams)
+        - 
+        - Make the Next-generation matrix K of `parms`
+        - """
+      148 function Kmat(parms::SEIRSStochParams)
+      708     Σmat = Sigma_mat(parms)
+      148     Kmat = -Tmat(parms) * inv(Σmat)
+      148     return Kmat
+        - end
+        - 
+        - """
+        -     compute_R0(parms::SEIRSStochParams)
+        - 
+        - Compute R0 as `spectral_radius` of next-generation matrix K of `parms`
+        - """
+        3 function compute_R0(parms::SEIRSStochParams)
+      147     K = Kmat(parms)
+      147     R0 = spectral_radius(K)
+      147     return R0
+        - end
+        - 
+        - """
+        -     calibrate_parms(draft_parms::SEIRSStochParams, target_r0::Float64)
+        - 
+        - Calibrate the `draft_parms` to produce the desired `target_r0`
+        - """
+       72 function calibrate_parms(draft_parms::SEIRSStochParams, target_r0::Float64)
+       72     draft_r0 = compute_R0(draft_parms)
+       72     β_new = draft_parms.β * target_r0 / draft_r0
+       72     parms = SEIRSStochParams(
+        -         β_new,
+        -         draft_parms.σ,
+        -         draft_parms.γ,
+        -         draft_parms.ω,
+        -         draft_parms.M,
+        -         draft_parms.W,
+        -         draft_parms.n_activity,
+        -         draft_parms.class_sizes,
+        -         draft_parms.act_levels,
+        -         draft_parms.pop_size
+        -     )
+       72     @assert compute_R0(parms) ≈ target_r0 "Calibration failed: new parameters do not give target_r0"
+       72     return parms
+        - end

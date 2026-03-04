@@ -1,0 +1,47 @@
+# Comparing Homogeneous and Heterogeneous Epidemics
+
+This file contains methods used for comparing the 1. homogeneous
+population case (i.e. no activity differences) and 2. the heterogeneous
+population case, epsilon = 0 (i.e. with activity differences but
+proportionate mixing). 3. heterogeneous case with epsilon = 0.5
+(i.e. with activity differences and some assortativity). 4. as (3) but
+with some switching between activity classes.
+
+This is intended to illustrate to the reader the effect of heterogeneity
+and activity switching on the epidemic dynamics.
+
+``` r
+
+library(MixSwitchEpi)
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+
+library(tidyr)
+```
+
+``` r
+
+# set up parameters for the comparison
+N <- 1e6
+n_activity <- 5
+R0 <- 2.5
+homogeneous_case <- scalar_reference(R0)
+
+# for the heterogeneous case we require the activity scores, which we get from the empirical data
+activity_scores <- activity_empirical("haslemere", n_activity)
+```

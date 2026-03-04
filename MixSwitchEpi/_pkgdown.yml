@@ -1,0 +1,126 @@
+url: https://vargasrichards.github.io/MixSwitchEpi/
+template:
+  bootstrap: 5
+  light-switch: true
+
+reference:
+  - title: Core Simulation & Framework
+    desc: Main epidemic models and high-level simulation entry points.
+    contents:
+      - run_system_wparms
+      - seirs_act
+      - main_f
+      - run_combination
+      - scan_mixswitch_framework
+      - scalar_reference
+      - haslemere_empirical
+      - haslemere_grid
+      - haslemere_mix_parms
+      - seir_model
+      - metaroutine
+      - plot_combin
+
+  - title: Parameter Management
+    desc: Functions for creating, calibrating, and managing model parameters.
+    contents:
+      - make_parms
+      - calibrate_parms
+      - basic_scalar_parms
+      - make_homogeneous_parms
+      - make_initial_conditions
+      - make_initial_guess
+      - make_initial_specific
+      - make_initial_uniform
+      - activity_empirical
+      - activity_linear
+      - activity_null
+      - find_gamma_expectations
+      - make_generator
+
+  - title: Mixing & Contact Models
+    desc: Generative models for contact/mixing matrices within and between activity classes.
+    contents:
+      - garnett_mixing
+      - exponential_mixing
+      - polynomial_mixing
+      - make_contact_matrix
+      - generate_mixingmat
+      - rho_matrix
+
+  - title: Switching Dynamics
+    desc: Rate matrices defining movement between activity classes.
+    contents:
+      - simple_switching
+      - adjacent_switching
+      - adjacent_switching_wrapped
+      - elaborated_switching
+      - make_switch_matrix
+
+  - title: Epidemic Metrics & Analytics
+    desc: Functions to calculate R0, Rt, and characterise epidemic outcomes.
+    contents:
+      - compute_r0
+      - compute_rt
+      - compute_rt_ts
+      - compute_all
+      - compute_hit
+      - compute_homogeneous_metrics
+      - compute_ngm
+      - compute_r0_static
+      - compute_ttprev
+      - characterise_peaks
+      - characterise_end
+      - compute_spectral_gap
+      - spectral_radius
+      - t_matrix
+      - t_entry
+      - sigma_matrix
+      - check_fraction_exposed
+      - find_peaks
+      - find_steadystate
+      - homogeneous_metrics
+
+  - title: Visualisation & Comparison
+    desc: Plotting tools for trajectories, heatmaps, and model comparisons.
+    contents:
+      - plot_epidemic_annotated
+      - plot_epidemic_faceted
+      - plot_epidemic_with_rt
+      - plot_haslemere_grid
+      - plot_rt_timeseries
+      - plot_2d_heatmaps
+      - plot_sweep_results_1d
+      - curve_comparison
+      - bar_comparison
+      - compare_curves_main
+      - homogeneous_curve
+      - multi_outcome_comparison
+      - example_comp
+      - save_heatmaps
+      - make_metric_comparison
+
+  - title: Structural Approximations
+    desc: Mapping complex heterogeneous models to simpler parametric approximations.
+    contents:
+      - approx_epsilon
+      - approx_both
+      - approx_minimally_constrained
+      - compare_approx
+      - approximation_error
+      - fit_noswitch
+      - score_difference
+
+  - title: Utilities & Data Handling
+    desc: Helper functions for state manipulation, file export, and internal formatting.
+    contents:
+      - neaten_state
+      - declass
+      - kronecker_delta
+      - get_info
+      - write_epidemic
+      - pivot_seir
+      - scale_results
+      - mat_from_vec
+      - vec_from_mat
+      - report_scan_results
+      - display_mix_switch

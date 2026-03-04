@@ -1,0 +1,44 @@
+Package: MixSwitchEpi
+Title: Epidemics in Heterogeneously Active Populations With Movement Between Activity Classes
+Version: 0.0.9.501
+License: MIT + file LICENSE
+Authors@R: 
+    person(
+      given = "Alexis",
+      family = "Vargas Richards",
+      email = "amr625@ic.ac.uk",
+      role = c("aut", "cre"))
+LinkingTo: cpp11, dust2, monty
+Description: Models and analysis of SEIR epidemics in heterogeneous populations. 
+Encoding: UTF-8
+URL: https://vargasrichards.github.io/MixSwitchEpi/, https://github.com/vargasrichards/MixSwitchEpi
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    ggpubr,
+    epiparameter
+Config/testthat/edition: 3
+Imports: 
+    magrittr,
+    data.table (>= 1.9.8),
+    dplyr,
+    dust2,
+    odin2,
+    ggplot2,
+    MetBrewer,
+    assertthat,
+    cli,
+    glue,
+    nloptr,
+    patchwork,
+    tibble,
+    tidyr,
+    RColorBrewer,
+    deSolve,
+    finalsize,
+    forcats,
+    viridis
+VignetteBuilder: knitr

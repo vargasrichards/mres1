@@ -1,0 +1,10 @@
+pandoc: 3.8.2.1
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  approximation: approximation.html
+  comparison_barchart: comparison_barchart.html
+last_built: 2026-02-20T12:32Z
+urls:
+  reference: https://vargasrichards.github.io/MixSwitchEpi/reference
+  article: https://vargasrichards.github.io/MixSwitchEpi/articles

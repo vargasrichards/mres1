@@ -1,0 +1,104 @@
+# functions dealing with the extinction threshold
+using Plots
+using CSV
+using DataFrames
+"""
+        find_threshold(parms::SEIRSStochParams; n_sims::Int = 1000, tmax::Float64 = 50.0, threshold_value::Float64 = 0.05)
+
+Find the initial infected count threshold for which the probability of stochastic fadeout is below the specified threshold value.
+
+# Arguments
+- `parms::SEIRSStochParams`: the parameters of the SEIRS stochastic model
+- `n_sims::Int`: the number of stochastic simulations to run for each initial infected
+- `tmax::Float64`: the maximum time to run each simulation for
+- `threshold_value::Float64`: the threshold value for the probability of fadeout below which we consider extinction to be unlikely
+
+# Returns
+- `Int`: the smallest initial infected count for which the probability of fadeout is below the threshold value. If no such count is found, returns the population size.
+
+"""
+function find_threshold(parms::SEIRSStochParams; 
+                        n_sims::Int = 1000, 
+                        tmax::Float64 = 50.0, 
+                        threshold_value::Float64 = 0.05)
+    # Run simulations with varying initial infected count and find the smallest initial infected count for which the probability of fadeout is below the threshold value.
+    pop_size = parms.pop_size
+    for init_infected in 1:pop_size
+        # build an initial state with `init_infected` total infecteds;
+        # place them in class 1 for a simple threshold scan
+        init = make_initial_state(parms.class_sizes, init_infected; init_mode = :class, init_class = 1)
+        pr_extinct = pr_fadeout(parms, init; n_sims=n_sims, tmax=tmax, threshold_value=threshold_value)
+        if pr_extinct < threshold_value
+            return init_infected
+        end
+    end
+    return pop_size 
+end
+
+"""
+    plot_pext_initial(parms::SEIRSStochParams; n_sims::Int = 1000, tmax::Float64 = 50.0, threshold_value::Float64 = 0.05)
+
+Plot the probability of extinction as a function of the initial number of infecteds
+
+# Arguments
+
+- `parms::SEIRSStochParams`
+- `init_class::Int`: the initially infected activity class
+- `n_sims::Int`: the number of stochastic simulations to perform
+- `tmax::Float`: the number of days to simulate out to
+- `threshold_value::Float64`: the estimated probability of extinction below which we
+    say that the the threshold has been reached (ie extinction essentially does not happen)
+
+
+# Returns
+- `DataFrame`: DataFrame containing the details of the run. 
+In particular, this has columns `E0` ()
+"""
+function plot_pext_initial(parms::SEIRSStochParams; 
+                            init_class::Int, 
+                            n_sims::Int = 1000,
+                            tmax::Float64 = 1000.0, 
+                            threshold_value::Float64 = 0.1)
+    remanence = parms.W[1,1] 
+    Plots.plot(theme = :rose_pine_dawn)
+    pop_size = parms.pop_size
+    init_infecteds = 1:pop_size
+    pexts = Float64[]
+    tested = Int[]
+    class_initial = Int[]
+    r0s = Float64[]
+    R0 = compute_R0(parms)
+    for init_infected in init_infecteds
+        init = make_initial_state(parms.class_sizes, init_infected; init_mode = :class, init_class = init_class)
+        pr_extinct = pr_fadeout(parms, init; num_initial = init_infected, n_sims=n_sims, 
+            tmax=tmax, threshold_value=threshold_value)
+        push!(pexts, pr_extinct)
+        push!(tested, init_infected)
+        push!(r0s, R0)
+        push!(class_initial, init_class)
+        if pr_extinct < threshold_value
+            println("using initial infected class $init_class")
+            println("Estimated Pr(extinction) with $init_infected initial infecteds: $pr_extinct from $n_sims simulations. R0 = $R0")
+            println("breaking as we have reached the threshold value of $threshold_value")
+        break
+        end
+    end
+    #write out the results to a csv for plotting in R  etc if desired
+    outdir = joinpath(@__DIR__, "..", "output")
+    if !isdir(outdir)
+        mkpath(outdir)
+    end
+
+    df = DataFrame(E0 = tested, switch_rate = remanence,
+                    class_initial = init_class,
+                    R_nought = r0s,
+                     p_extinction = pexts)
+    CSV.write(joinpath(outdir, "extinction_threshold_scan.csv"), df)    
+    Plots.plot(tested, pexts;
+                 xlabel="Initial num(exposeds)", 
+                 ylabel="Prob.(extinction)", 
+                 title="Extinction probability with E0")
+    
+    Plots.savefig("extinction_threshold.pdf")
+    return df
+end

@@ -1,0 +1,258 @@
+# MixSwitchEpi
+
+This repository contains tools and models for epidemics with
+heterogeneous contact (activity) classes, with individuals able to
+switch between them through time.
+
+It requires `odin2` to run. \### Installation
+
+# Package index
+
+## Core Simulation & Framework
+
+Main epidemic models and high-level simulation entry points.
+
+- [`run_system_wparms()`](https://vargasrichards.github.io/MixSwitchEpi/reference/run_system_wparms.md)
+  : Run the system and produce neat output
+- [`seirs_act()`](https://vargasrichards.github.io/MixSwitchEpi/reference/seirs_act.md)
+  : SEIRS Activity Model Generator
+- [`main_f()`](https://vargasrichards.github.io/MixSwitchEpi/reference/main_f.md)
+  : Demo function for plotting
+- [`run_combination()`](https://vargasrichards.github.io/MixSwitchEpi/reference/run_combination.md)
+  : Run and record a 2D parameter scan
+- [`scan_mixswitch_framework()`](https://vargasrichards.github.io/MixSwitchEpi/reference/scan_mixswitch_framework.md)
+  : Scan 2D parameter space (epsilon × switch_rate.
+- [`scalar_reference()`](https://vargasrichards.github.io/MixSwitchEpi/reference/scalar_reference.md)
+  : Homogeneous SEIR trajectory (mass-action)
+- [`haslemere_empirical()`](https://vargasrichards.github.io/MixSwitchEpi/reference/haslemere_empirical.md)
+  : Empirical Haslemere scan
+- [`haslemere_grid()`](https://vargasrichards.github.io/MixSwitchEpi/reference/haslemere_grid.md)
+  : Haslemere grid scan
+- [`haslemere_mix_parms()`](https://vargasrichards.github.io/MixSwitchEpi/reference/haslemere_mix_parms.md)
+  : Forces proportionate (random) mixing in Haslemere activity classes
+  Hence epsilon = 0
+- [`seir_model()`](https://vargasrichards.github.io/MixSwitchEpi/reference/seir_model.md)
+  : Homogeneous SEIR model
+- [`metaroutine()`](https://vargasrichards.github.io/MixSwitchEpi/reference/metaroutine.md)
+  : Run a standard set of routines
+- [`plot_combin()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_combin.md)
+  : Plot combined results
+
+## Parameter Management
+
+Functions for creating, calibrating, and managing model parameters.
+
+- [`make_parms()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_parms.md)
+  : Make a default parameterisaiton
+- [`calibrate_parms()`](https://vargasrichards.github.io/MixSwitchEpi/reference/calibrate_parms.md)
+  : Changes the β value until the target R0 is met
+- [`basic_scalar_parms()`](https://vargasrichards.github.io/MixSwitchEpi/reference/basic_scalar_parms.md)
+  : Get the scalar epi parameters for given pathogen
+- [`make_homogeneous_parms()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_homogeneous_parms.md)
+  : Make homogeneous parameters
+- [`make_initial_conditions()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_initial_conditions.md)
+  : Make the initial conditions
+- [`make_initial_guess()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_initial_guess.md)
+  : Make an initial guess of an 'effective' mixing matrix
+- [`make_initial_specific()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_initial_specific.md)
+  : Specific activity class infected first.
+- [`make_initial_uniform()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_initial_uniform.md)
+  : Initial conditions where each compartment is inoculated
+  simultaenously with an equal fraction of exposed individuals (or,
+  rather, stuff...)
+- [`activity_empirical()`](https://vargasrichards.github.io/MixSwitchEpi/reference/activity_empirical.md)
+  : Retrieve fitted activity scores for a given setting
+- [`activity_linear()`](https://vargasrichards.github.io/MixSwitchEpi/reference/activity_linear.md)
+  : Generate the activity-class scaler for each activity class Linear
+  activity scores
+- [`activity_null()`](https://vargasrichards.github.io/MixSwitchEpi/reference/activity_null.md)
+  : Generate a null activity vector
+- [`find_gamma_expectations()`](https://vargasrichards.github.io/MixSwitchEpi/reference/find_gamma_expectations.md)
+  : Find expected values (means) within gamma distribution bins
+- [`make_generator()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_generator.md)
+  : Make a generator matrix
+
+## Mixing & Contact Models
+
+Generative models for contact/mixing matrices within and between
+activity classes.
+
+- [`garnett_mixing()`](https://vargasrichards.github.io/MixSwitchEpi/reference/garnett_mixing.md)
+  : parameterically generate mixing matrix for the desired number
+  ofactivity classes
+- [`exponential_mixing()`](https://vargasrichards.github.io/MixSwitchEpi/reference/exponential_mixing.md)
+  : Parameterically generate exponential mixing model
+- [`polynomial_mixing()`](https://vargasrichards.github.io/MixSwitchEpi/reference/polynomial_mixing.md)
+  : Parametrically generate mixing matrix for the desired
+- [`make_contact_matrix()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_contact_matrix.md)
+  : Construct the contact matrix
+- [`generate_mixingmat()`](https://vargasrichards.github.io/MixSwitchEpi/reference/generate_mixingmat.md)
+  : Generate a mixing/contact matrix with selectable model
+- [`rho_matrix()`](https://vargasrichards.github.io/MixSwitchEpi/reference/rho_matrix.md)
+  : Generates the rho matrix from parameters
+
+## Switching Dynamics
+
+Rate matrices defining movement between activity classes.
+
+- [`simple_switching()`](https://vargasrichards.github.io/MixSwitchEpi/reference/simple_switching.md)
+  : Make the simplest possible switching matrix.
+- [`adjacent_switching()`](https://vargasrichards.github.io/MixSwitchEpi/reference/adjacent_switching.md)
+  : Switching matrix where you can only move between adjacent classes
+- [`adjacent_switching_wrapped()`](https://vargasrichards.github.io/MixSwitchEpi/reference/adjacent_switching_wrapped.md)
+  : Switching matrix where you can only move between adjacent classes
+  but wraps lowest and highest activities.
+- [`elaborated_switching()`](https://vargasrichards.github.io/MixSwitchEpi/reference/elaborated_switching.md)
+  : Elaborated switching
+- [`make_switch_matrix()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_switch_matrix.md)
+  : Make the switching matrix according to supplied model
+
+## Epidemic Metrics & Analytics
+
+Functions to calculate R0, Rt, and characterise epidemic outcomes.
+
+- [`compute_r0()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_r0.md)
+  : Computes the next-generation matrix and R0
+- [`compute_rt()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_rt.md)
+  : Computes the Rt using the population state at a particular time t
+- [`compute_rt_ts()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_rt_ts.md)
+  : Compute R0 and Rt time series from model output
+- [`compute_all()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_all.md)
+  : Wrapper function to compute all metrics
+- [`compute_hit()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_hit.md)
+  : Compute empirical herd immunity threshold (HIT)
+- [`compute_homogeneous_metrics()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_homogeneous_metrics.md)
+  : Computes the outcome metrics for a homogeneous population
+- [`compute_ngm()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_ngm.md)
+  : Constructs the next-generation matrix
+- [`compute_r0_static()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_r0_static.md)
+  : Compute R0 from a static mixing matrix and scalar parameters
+- [`compute_ttprev()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_ttprev.md)
+  : Compute time to threshold prevalence
+- [`characterise_peaks()`](https://vargasrichards.github.io/MixSwitchEpi/reference/characterise_peaks.md)
+  : Characterise epidemic peaks for total and by class
+- [`characterise_end()`](https://vargasrichards.github.io/MixSwitchEpi/reference/characterise_end.md)
+  : Compute epidemic duration and final size
+- [`compute_spectral_gap()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compute_spectral_gap.md)
+  : spectral gap calculation
+- [`spectral_radius()`](https://vargasrichards.github.io/MixSwitchEpi/reference/spectral_radius.md)
+  : Convienience function to compute the spectral radius of a matrix
+- [`t_matrix()`](https://vargasrichards.github.io/MixSwitchEpi/reference/t_matrix.md)
+  : Generates the T matrix from parameters
+- [`t_entry()`](https://vargasrichards.github.io/MixSwitchEpi/reference/t_entry.md)
+  : Generates a single entry of the T matrix
+- [`sigma_matrix()`](https://vargasrichards.github.io/MixSwitchEpi/reference/sigma_matrix.md)
+  : Makes the sigma matrix
+- [`check_fraction_exposed()`](https://vargasrichards.github.io/MixSwitchEpi/reference/check_fraction_exposed.md)
+  : Sanitise the exposed fraction
+- [`find_peaks()`](https://vargasrichards.github.io/MixSwitchEpi/reference/find_peaks.md)
+  : Find epidemic peaks (for I or E + I)
+- [`find_steadystate()`](https://vargasrichards.github.io/MixSwitchEpi/reference/find_steadystate.md)
+  : Find the steady-state distribution of a continuous-time Markov chain
+  given its transition rate matrix W.
+- [`homogeneous_metrics()`](https://vargasrichards.github.io/MixSwitchEpi/reference/homogeneous_metrics.md)
+  : Metrics for homogeneous SEIR epidemic
+
+## Visualisation & Comparison
+
+Plotting tools for trajectories, heatmaps, and model comparisons.
+
+- [`plot_epidemic_annotated()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_epidemic_annotated.md)
+  : Plot epidemic course with annotated metrics
+- [`plot_epidemic_faceted()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_epidemic_faceted.md)
+  : Plot all compartments (SEIR) separately
+- [`plot_epidemic_with_rt()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_epidemic_with_rt.md)
+  : Combined plot of epidemic trajectory and Rt
+- [`plot_haslemere_grid()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_haslemere_grid.md)
+  : Plot the grid of (e.g.,) Haslemere results
+- [`plot_rt_timeseries()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_rt_timeseries.md)
+  : Plot Rt over time with R0 reference line
+- [`plot_2d_heatmaps()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_2d_heatmaps.md)
+  : Plot 2D heatmaps of epidemic metrics
+- [`plot_sweep_results_1d()`](https://vargasrichards.github.io/MixSwitchEpi/reference/plot_sweep_results_1d.md)
+  : Plot 1D parameter sweeps
+- [`curve_comparison()`](https://vargasrichards.github.io/MixSwitchEpi/reference/curve_comparison.md)
+  : Compare SEIR curves across models, using the palette to colour the
+  curves by model type. This is a more direct comparison of the epidemic
+  trajectories than the bar_comparison of summary metrics, and can
+  reveal differences in timing and shape of the epidemics that may not
+  be captured by summary metrics alone. Facets by S, e, i ,r and plots
+  the occupancy for each of those states for each model .
+- [`bar_comparison()`](https://vargasrichards.github.io/MixSwitchEpi/reference/bar_comparison.md)
+  : Bar comparison of outcome metrics across models
+- [`compare_curves_main()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compare_curves_main.md)
+  : Main comparison: faceted SEIR curves (left) + grouped metric bars
+  (right)
+- [`homogeneous_curve()`](https://vargasrichards.github.io/MixSwitchEpi/reference/homogeneous_curve.md)
+  : Plot homogeneous mass action model
+- [`multi_outcome_comparison()`](https://vargasrichards.github.io/MixSwitchEpi/reference/multi_outcome_comparison.md)
+  : Multi-outcome 2-D comparison heatmaps
+- [`example_comp()`](https://vargasrichards.github.io/MixSwitchEpi/reference/example_comp.md)
+  : Example comparison scan and plot
+- [`save_heatmaps()`](https://vargasrichards.github.io/MixSwitchEpi/reference/save_heatmaps.md)
+  : Save all heatmap plots
+- [`make_metric_comparison()`](https://vargasrichards.github.io/MixSwitchEpi/reference/make_metric_comparison.md)
+  : Metric comparison across models
+
+## Structural Approximations
+
+Mapping complex heterogeneous models to simpler parametric
+approximations.
+
+- [`approx_epsilon()`](https://vargasrichards.github.io/MixSwitchEpi/reference/approx_epsilon.md)
+  : Apperoximate a switching system with a no-switch system using a
+  single scalar epsilon parameter for assortativity/proportionate
+  mixing.
+- [`approx_both()`](https://vargasrichards.github.io/MixSwitchEpi/reference/approx_both.md)
+  : Approximate a switching system with a no-switch system using both
+  minimally constrained contact matrix and epsilon-constrained
+  approximations.
+- [`approx_minimally_constrained()`](https://vargasrichards.github.io/MixSwitchEpi/reference/approx_minimally_constrained.md)
+  : Approximate a switching system with a minimally constrained contact
+  matrix with no switching
+- [`compare_approx()`](https://vargasrichards.github.io/MixSwitchEpi/reference/compare_approx.md)
+  : Function to plot the approximated system against the original system
+- [`approximation_error()`](https://vargasrichards.github.io/MixSwitchEpi/reference/approximation_error.md)
+  : Characterise error in approximations across parameter space
+- [`fit_noswitch()`](https://vargasrichards.github.io/MixSwitchEpi/reference/fit_noswitch.md)
+  : Fit non-switching system
+- [`score_difference()`](https://vargasrichards.github.io/MixSwitchEpi/reference/score_difference.md)
+  : Score difference between model outputs
+
+## Utilities & Data Handling
+
+Helper functions for state manipulation, file export, and internal
+formatting.
+
+- [`neaten_state()`](https://vargasrichards.github.io/MixSwitchEpi/reference/neaten_state.md)
+  : Neaten up the dust2 output into a data.table
+- [`declass()`](https://vargasrichards.github.io/MixSwitchEpi/reference/declass.md)
+  : Simplifies epidemic output
+- [`kronecker_delta()`](https://vargasrichards.github.io/MixSwitchEpi/reference/kronecker_delta.md)
+  : kronecker_delta
+- [`get_info()`](https://vargasrichards.github.io/MixSwitchEpi/reference/get_info.md)
+  : Convenience function to get population info from model output
+- [`write_epidemic()`](https://vargasrichards.github.io/MixSwitchEpi/reference/write_epidemic.md)
+  : Writes out the epidemic to a csv
+- [`pivot_seir()`](https://vargasrichards.github.io/MixSwitchEpi/reference/pivot_seir.md)
+  : Pivot SEIR epidemic df + prepare for plotting
+- [`scale_results()`](https://vargasrichards.github.io/MixSwitchEpi/reference/scale_results.md)
+  : Compute how synchronised epidemic peaks are Scale results by
+  occupancy fraction for each activity class
+- [`mat_from_vec()`](https://vargasrichards.github.io/MixSwitchEpi/reference/mat_from_vec.md)
+  : Make a matrix suitable for use as a contact matrix from a supplied
+  vector
+- [`vec_from_mat()`](https://vargasrichards.github.io/MixSwitchEpi/reference/vec_from_mat.md)
+  : Make a vector for input into optimisation fun.
+- [`report_scan_results()`](https://vargasrichards.github.io/MixSwitchEpi/reference/report_scan_results.md)
+  : Report the parameter scan results
+- [`display_mix_switch()`](https://vargasrichards.github.io/MixSwitchEpi/reference/display_mix_switch.md)
+  : Pretty-print contact and switching matrices
+
+# Articles
+
+### All vignettes
+
+- [MixSwitchEpi](https://vargasrichards.github.io/MixSwitchEpi/articles/approximation.md):
+- [Comparing Homogeneous and Heterogeneous
+  Epidemics](https://vargasrichards.github.io/MixSwitchEpi/articles/comparison_barchart.md):

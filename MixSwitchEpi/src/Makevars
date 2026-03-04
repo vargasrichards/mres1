@@ -1,0 +1,3 @@
+# -*- makefile -*-
+PKG_CXXFLAGS = -I../inst/include
+PKG_LIBS=$(SHLIB_OPENMP_CXXFLAGS)

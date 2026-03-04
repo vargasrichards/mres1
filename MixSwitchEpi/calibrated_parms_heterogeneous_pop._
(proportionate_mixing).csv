@@ -1,0 +1,11 @@
+"name","calibrated_parms.beta","calibrated_parms.sigma","calibrated_parms.gamma","calibrated_parms.n_activity","calibrated_parms.N","calibrated_parms.t_end","calibrated_parms.class_sizes","calibrated_parms.activity_scores","calibrated_parms.epsilon","calibrated_parms.swch.1","calibrated_parms.swch.2","calibrated_parms.swch.3","calibrated_parms.swch.4","calibrated_parms.swch.5","calibrated_parms.m.1","calibrated_parms.m.2","calibrated_parms.m.3","calibrated_parms.m.4","calibrated_parms.m.5","calibrated_parms.E0","calibrated_parms.S0","calibrated_parms.omega"
+"Heterogeneous pop. 
+(proportionate mixing)",0.117096018735363,0.333333333333333,0.25,5,1e+06,1200,2e+05,0.936825,0,0,0,0,0,0,0.0438793911007026,0.1022418735363,0.163566088992974,0.246890725995316,0.443421920374707,0.001,0.999,0
+"Heterogeneous pop. 
+(proportionate mixing)",0.117096018735363,0.333333333333333,0.25,5,1e+06,1200,2e+05,2.182864,0,0,0,0,0,0,0.0438793911007026,0.1022418735363,0.163566088992974,0.246890725995316,0.443421920374707,0.001,0.999,0
+"Heterogeneous pop. 
+(proportionate mixing)",0.117096018735363,0.333333333333333,0.25,5,1e+06,1200,2e+05,3.492136,0,0,0,0,0,0,0.0438793911007026,0.1022418735363,0.163566088992974,0.246890725995316,0.443421920374707,0.001,0.999,0
+"Heterogeneous pop. 
+(proportionate mixing)",0.117096018735363,0.333333333333333,0.25,5,1e+06,1200,2e+05,5.271117,0,0,0,0,0,0,0.0438793911007026,0.1022418735363,0.163566088992974,0.246890725995316,0.443421920374707,0.001,0.999,0
+"Heterogeneous pop. 
+(proportionate mixing)",0.117096018735363,0.333333333333333,0.25,5,1e+06,1200,2e+05,9.467058,0,0,0,0,0,0,0.0438793911007026,0.1022418735363,0.163566088992974,0.246890725995316,0.443421920374707,0.001,0.999,0

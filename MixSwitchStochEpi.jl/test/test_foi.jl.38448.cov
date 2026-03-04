@@ -1,0 +1,26 @@
+        - # force of infection tests
+        - # Alexis Vargas Richards, Jan 2026
+        - 
+        - using Test
+        - 
+        - 
+        - 
+        1 @testset "FOI total can be decomposed into component FOIs from each class" begin
+        -     # we can calculate the FOI from each class separately and check that they sum to the total FOI.
+        2     params, init, tspan = MixSwitchStochEpi.default_parametrisation()
+        1         C = params.M
+        1         act_levels = params.act_levels
+        1         class_sizes = params.class_sizes
+        1         n = params.n_activity
+        -         # calculate FOI from each class separately
+        1         foi_from_class = zeros(n)
+        1         for j in 1:n
+        5             foi_from_class[j] = sum(C[:, j] .* act_levels[j] .* init[3, j]) / sum(class_sizes .* act_levels)
+        5         end
+        1         total_foi = sum(foi_from_class)
+        -         # calculate total FOI directly
+        1         total_foi_direct = sum(C .* (act_levels .* init[3, :])') / sum(class_sizes .* act_levels)
+        1         @test isapprox(total_foi, total_foi_direct; atol=1e-6)
+        - end
+        - 
+        - # @testset "FOI "

@@ -1,0 +1,33 @@
+using Test
+using MixSwitchStochEpi
+
+@testset "Basic infection flow" begin
+    params, init, tspan = MixSwitchStochEpi.default_parametrisation()
+    # β = 0 => no new infections: E and I should go to zero eventually
+    p0 = MixSwitchStochEpi.SEIRSStochParams(0.0, params.σ, params.γ, params.ω, params.M, params.W, params.n_activity, params.class_sizes, params.act_levels, params.pop_size)
+    res = MixSwitchStochEpi.simulate_system!(p0, init; tmax=100.0)
+    final = res.states[end]
+    @test sum(final[2, :]) + sum(final[3, :]) == 0
+end
+
+@testset "Activity-class confinement with no switching and full assortativity" begin
+    n = 3
+    act_levels = [1.0, 1.0, 1.0]
+    class_sizes = [100, 100, 100]
+    C = MixSwitchStochEpi.make_garnett_contact(1.0, n, act_levels, class_sizes) # fully assortative
+    W_zero = zeros(Float64, n, n)
+    # params with no switching
+    p = MixSwitchStochEpi.SEIRSStochParams(0.5, 1/3, 1/4, 0.0, C, W_zero, n, class_sizes, act_levels, sum(class_sizes))
+
+    # initial infected only in class 1
+    init = zeros(Int64, 4, n)
+    init[1, :] .= class_sizes
+    init[1,1] -= 1
+    init[3,1] += 1
+
+    res = MixSwitchStochEpi.simulate_system!(p, init; tmax = 50.0)
+    # check that classes 2 and 3 never have infected (E+I) > 0
+    for st in res.states
+        @test (sum(st[2, 2:3]) + sum(st[3, 2:3])) == 0
+    end
+end

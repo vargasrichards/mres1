@@ -1,0 +1,21 @@
+- The project is out-of-sync -- use `renv::status()` for details.
+ℹ Loading MixSwitchEpi
+Running calibration_mode = 'none'...
+ℹ Precomputing contact matrices using garnett_mixing
+ℹ calibration mode: none
+ℹ Precomputing matrices simple_switching)
+ℹ Precomputing contact matrices
+using garnett_mixing
+Running 510 parameter combinations...
+
+
+
+
+
+
+
+
+
+
+
+Execution halted
